@@ -65,7 +65,7 @@ DRAW = 4
 
 INF = 2000000000
 
-# 패턴 확인이 탐색 방향
+# 패턴 확인 탐색 방향
 HORIZONTAL = 0
 VERTICAL = 1
 MAIN_DIAGONAL = 2

@@ -201,11 +201,13 @@ class Ai1:
                 i, j = k
                 if self.goBoard[i][j] == EMPTY:
                     self.goBoard[i][j] = AI
+                    self.stoneCnt += 1
                     ret = self.minmax(depth - 1, PLAYER1)
                     if ret[0] > maxValue:
                         maxValue = ret[0]
                         x = i
                         y = j
+                    self.stoneCnt -= 1
                     self.goBoard[i][j] = EMPTY
             if depth == 1:
                 return (maxValue, x, y)
@@ -220,11 +222,13 @@ class Ai1:
                 i, j = k
                 if self.goBoard[i][j] == EMPTY:
                     self.goBoard[i][j] = PLAYER1
+                    self.stoneCnt += 1
                     ret = self.minmax(depth - 1, AI)
                     if ret[0] < minValue:
                         minValue = ret[0]
                         x = i
                         y = j
+                    self.stoneCnt -= 1
                     self.goBoard[i][j] = EMPTY
             if depth == 1:
                 return (minValue, x, y)

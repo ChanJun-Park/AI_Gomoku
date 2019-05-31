@@ -1,0 +1,255 @@
+{\rtf1\ansi\uc0\deff0{\fonttbl{\f0\fmodern\fprq1\fcharset0;}}{\colortbl;\red187\green187\blue187;\red64\green128\blue128;\red188\green122\blue0;\red0\green128\blue0;\red176\green0\blue64;\red102\green102\blue102;\red170\green34\blue255;\red0\green0\blue255;\red210\green65\blue58;\red25\green23\blue124;\red136\green0\blue0;\red160\green160\blue0;\red153\green153\blue153;\red125\green144\blue41;\red186\green33\blue33;\red187\green102\blue136;\red187\green102\blue34;\red0\green0\blue128;\red128\green0\blue128;\red160\green0\blue0;\red0\green160\blue0;\red255\green0\blue0;\red136\green136\blue136;\red0\green68\blue221;}\f0 {\cf4\b from} {\cf8\b evaluation_constant} {\cf4\b import} {\cf6 *}\par
+{\cf4\b import} {\cf8\b copy}\par
+{\cf4\b import} {\cf8\b random}\par
+\par
+\par
+{\cf4\b class} {\cf8\b Ai1}:\par
+    {\cf4\b def} {\cf8 __init__}({\cf4 self}, board):\par
+        {\cf4 self}{\cf6 .}goBoard {\cf6 =} board\par
+        {\cf4 self}{\cf6 .}searchSpaceState, {\cf4 self}{\cf6 .}searchSpace {\cf6 =} {\cf4 self}{\cf6 .}getInitialSearchSpace()\par
+        {\cf4 self}{\cf6 .}searchCandidate {\cf6 =} copy{\cf6 .}deepcopy({\cf4 self}{\cf6 .}searchSpace)\par
+        {\cf4 self}{\cf6 .}evaluationSpaceState, {\cf4 self}{\cf6 .}evaluationSpace {\cf6 =} {\cf4 self}{\cf6 .}getInitialEvaluationSpace()\par
+        {\cf4 self}{\cf6 .}stoneCnt {\cf6 =} {\cf6 1}\par
+        {\cf4 self}{\cf6 .}searchSize {\cf6 =} {\cf6 20}\par
+        {\cf4\b pass}\par
+\par
+    {\cf4\b def} {\cf8 getInitialSearchSpace}({\cf4 self}):\par
+        board {\cf6 =} []\par
+        searchSpace {\cf6 =} []\par
+        {\cf4\b for} i {\cf7\b in} {\cf4 range}(GO_BOARD_X_COUNT):\par
+            board{\cf6 .}append([EMPTY] {\cf6 *} GO_BOARD_Y_COUNT)\par
+        {\cf4\b for} i {\cf7\b in} {\cf4 range}({\cf4 int}(GO_BOARD_X_COUNT {\cf6 /} {\cf6 2}) {\cf6 -} {\cf6 2}, {\cf4 int}(GO_BOARD_X_COUNT {\cf6 /} {\cf6 2}) {\cf6 +} {\cf6 3}):\par
+            {\cf4\b for} j {\cf7\b in} {\cf4 range}({\cf4 int}(GO_BOARD_Y_COUNT {\cf6 /} {\cf6 2}) {\cf6 -} {\cf6 2}, {\cf4 int}(GO_BOARD_Y_COUNT {\cf6 /} {\cf6 2}) {\cf6 +} {\cf6 3}):\par
+                board[i][j] {\cf6 =} {\cf4 True}\par
+                {\cf4\b if} i {\cf6 ==} j:\par
+                    {\cf4\b continue}\par
+                searchSpace{\cf6 .}append((i, j))\par
+        {\cf4\b return} board, searchSpace\par
+\par
+    {\cf4\b def} {\cf8 resetSearchSpace}({\cf4 self}, x, y):\par
+        {\cf4 self}{\cf6 .}searchSpaceState[x][y] {\cf6 =} {\cf4 True}\par
+        length {\cf6 =} {\cf4 len}({\cf4 self}{\cf6 .}searchCandidate)\par
+        {\cf4\b for} i {\cf7\b in} {\cf4 range}(length):\par
+            {\cf4\b if} {\cf4 self}{\cf6 .}searchCandidate[i] {\cf6 ==} (x, y):\par
+                {\cf4\b del} {\cf4 self}{\cf6 .}searchCandidate[i]\par
+                {\cf4\b break}\par
+\par
+        count {\cf6 =} {\cf4 len}({\cf4 self}{\cf6 .}searchCandidate)\par
+        {\cf4\b if} {\cf4 self}{\cf6 .}searchSize {\cf6 <}{\cf6 =} count:\par
+            count {\cf6 =} {\cf4 self}{\cf6 .}searchSize\par
+        {\cf4 self}{\cf6 .}searchSpace {\cf6 =} random{\cf6 .}sample({\cf4 self}{\cf6 .}searchCandidate, count)\par
+\par
+        left {\cf6 =} x {\cf6 -} {\cf6 2} {\cf4\b if} x {\cf6 -} {\cf6 2} {\cf6 >}{\cf6 =} {\cf6 0} {\cf4\b else} {\cf6 0}\par
+        right {\cf6 =} x {\cf6 +} {\cf6 2} {\cf4\b if} x {\cf6 +} {\cf6 2} {\cf6 <} GO_BOARD_X_COUNT {\cf4\b else} GO_BOARD_X_COUNT\par
+        top {\cf6 =} y {\cf6 -} {\cf6 2} {\cf4\b if} y {\cf6 -} {\cf6 2} {\cf6 >}{\cf6 =} {\cf6 0} {\cf4\b else} {\cf6 0}\par
+        bottom {\cf6 =} y {\cf6 +} {\cf6 2} {\cf4\b if} y {\cf6 +} {\cf6 2} {\cf6 <} GO_BOARD_Y_COUNT {\cf4\b else} GO_BOARD_Y_COUNT\par
+        {\cf4\b for} i {\cf7\b in} {\cf4 range}(left, right):\par
+            {\cf4\b for} j {\cf7\b in} {\cf4 range}(top, bottom):\par
+                {\cf4\b if} {\cf4 self}{\cf6 .}searchSpaceState[i][j]:\par
+                    {\cf4\b continue}\par
+                {\cf4 self}{\cf6 .}searchSpaceState[i][j] {\cf6 =} {\cf4 True}\par
+                {\cf4 self}{\cf6 .}searchCandidate{\cf6 .}append((i, j))\par
+                {\cf4 self}{\cf6 .}searchSpace{\cf6 .}append((i, j))\par
+        {\cf4\b pass}\par
+\par
+    {\cf4\b def} {\cf8 getInitialEvaluationSpace}({\cf4 self}):\par
+        board {\cf6 =} []\par
+        evaluationSpace {\cf6 =} []\par
+        {\cf4\b for} i {\cf7\b in} {\cf4 range}(GO_BOARD_X_COUNT):\par
+            board{\cf6 .}append([EMPTY] {\cf6 *} GO_BOARD_Y_COUNT)\par
+        {\cf4\b for} i {\cf7\b in} {\cf4 range}({\cf4 int}(GO_BOARD_X_COUNT {\cf6 /} {\cf6 2}) {\cf6 -} {\cf6 1}, {\cf4 int}(GO_BOARD_X_COUNT {\cf6 /} {\cf6 2}) {\cf6 +} {\cf6 2}):\par
+            {\cf4\b for} j {\cf7\b in} {\cf4 range}({\cf4 int}(GO_BOARD_Y_COUNT {\cf6 /} {\cf6 2}) {\cf6 -} {\cf6 1}, {\cf4 int}(GO_BOARD_Y_COUNT {\cf6 /} {\cf6 2}) {\cf6 +} {\cf6 2}):\par
+                board[i][j] {\cf6 =} {\cf4 True}\par
+                evaluationSpace{\cf6 .}append((i, j))\par
+        {\cf4\b return} board, evaluationSpace\par
+\par
+    {\cf4\b def} {\cf8 resetEvaluationSpace}({\cf4 self}, x, y):\par
+        left {\cf6 =} x {\cf6 -} {\cf6 1} {\cf4\b if} x {\cf6 -} {\cf6 1} {\cf6 >}{\cf6 =} {\cf6 0} {\cf4\b else} {\cf6 0}\par
+        right {\cf6 =} x {\cf6 +} {\cf6 2} {\cf4\b if} x {\cf6 +} {\cf6 2} {\cf6 <} GO_BOARD_X_COUNT {\cf4\b else} GO_BOARD_X_COUNT\par
+        top {\cf6 =} y {\cf6 -} {\cf6 1} {\cf4\b if} y {\cf6 -} {\cf6 1} {\cf6 >}{\cf6 =} {\cf6 0} {\cf4\b else} {\cf6 0}\par
+        bottom {\cf6 =} y {\cf6 +} {\cf6 2} {\cf4\b if} y {\cf6 +} {\cf6 2} {\cf6 <} GO_BOARD_Y_COUNT {\cf4\b else} GO_BOARD_Y_COUNT\par
+        {\cf4\b for} i {\cf7\b in} {\cf4 range}(left, right):\par
+            {\cf4\b for} j {\cf7\b in} {\cf4 range}(top, bottom):\par
+                {\cf4\b if} {\cf4 self}{\cf6 .}evaluationSpaceState[i][j]:\par
+                    {\cf4\b continue}\par
+                {\cf4 self}{\cf6 .}evaluationSpaceState[i][j] {\cf6 =} {\cf4 True}\par
+                {\cf4 self}{\cf6 .}evaluationSpace{\cf6 .}append((i, j))\par
+        {\cf4\b pass}\par
+\par
+    {\cf4\b def} {\cf8 patternCheck}({\cf4 self}, x, y, pattern, direction):\par
+        {\cf4\b if} direction {\cf6 ==} HORIZONTAL {\cf7\b and} x {\cf6 >}{\cf6 =} GO_BOARD_X_COUNT {\cf6 -} {\cf4 len}(pattern) {\cf6 +} {\cf6 1}:\par
+            {\cf4\b return} {\cf4 False}\par
+        {\cf4\b elif} direction {\cf6 ==} VERTICAL {\cf7\b and} y {\cf6 >}{\cf6 =} GO_BOARD_Y_COUNT {\cf6 -} {\cf4 len}(pattern) {\cf6 +} {\cf6 1}:\par
+            {\cf4\b return} {\cf4 False}\par
+        {\cf4\b elif} direction {\cf6 ==} MAIN_DIAGONAL {\cf7\b and}\\\par
+                (x {\cf6 >}{\cf6 =} GO_BOARD_X_COUNT {\cf6 -} {\cf4 len}(pattern) {\cf6 +} {\cf6 1} {\cf7\b or} y {\cf6 >}{\cf6 =} GO_BOARD_Y_COUNT {\cf6 -} {\cf4 len}(pattern) {\cf6 +} {\cf6 1}):\par
+            {\cf4\b return} {\cf4 False}\par
+        {\cf4\b elif} direction {\cf6 ==} SUB_DIAGONAL {\cf7\b and} \\\par
+                (x {\cf6 <} {\cf4 len}(pattern) {\cf6 -} {\cf6 1} {\cf7\b or} y {\cf6 >}{\cf6 =} GO_BOARD_Y_COUNT {\cf6 -} {\cf4 len}(pattern) {\cf6 +} {\cf6 1}):\par
+            {\cf4\b return} {\cf4 False}\par
+\par
+        check {\cf6 =} {\cf4 True}\par
+        {\cf4\b for} i {\cf7\b in} {\cf4 range}({\cf4 len}(pattern)):\par
+            nx {\cf6 =} x {\cf6 +} dx[direction] {\cf6 *} i\par
+            ny {\cf6 =} y {\cf6 +} dy[direction] {\cf6 *} i\par
+            {\cf4\b if} {\cf4 self}{\cf6 .}goBoard[nx][ny] {\cf6 !=} pattern[i]:\par
+                check {\cf6 =} {\cf4 False}\par
+                {\cf4\b break}\par
+        {\cf4\b return} check\par
+\par
+    {\cf4\b def} {\cf8 defenceCheck}({\cf4 self}):\par
+        retx, rety {\cf6 =} ({\cf4 None}, {\cf4 None})\par
+\par
+        {\cf4\b for} t {\cf7\b in} {\cf4 self}{\cf6 .}evaluationSpace:\par
+            x, y {\cf6 =} t\par
+            {\cf4\b for} i {\cf7\b in} {\cf4 range}({\cf6 4}):  {\cf2\i # {\u48169}{\u54693}}\par
+                {\cf4\b for} p {\cf7\b in} AI_DEFENCE_PATTERN1:\par
+                    {\cf4\b if} {\cf4 self}{\cf6 .}patternCheck(x, y, p, i):\par
+                        loc {\cf6 =} p{\cf6 .}index(EMPTY)\par
+                        retx {\cf6 =} x {\cf6 +} dx[i] {\cf6 *} loc\par
+                        rety {\cf6 =} y {\cf6 +} dy[i] {\cf6 *} loc\par
+                        {\cf4\b return} retx, rety\par
+\par
+                {\cf4\b for} p {\cf7\b in} AI_DEFENCE_PATTERN2:\par
+                    {\cf4\b if} {\cf4 self}{\cf6 .}patternCheck(x, y, p, i):\par
+                        loc {\cf6 =} p{\cf6 .}index(EMPTY)\par
+                        loc {\cf6 +}{\cf6 =} p[loc {\cf6 +} {\cf6 1}:]{\cf6 .}index(EMPTY)\par
+                        loc {\cf6 +}{\cf6 =} {\cf6 1}\par
+                        retx {\cf6 =} x {\cf6 +} dx[i] {\cf6 *} loc\par
+                        rety {\cf6 =} y {\cf6 +} dy[i] {\cf6 *} loc\par
+                        {\cf4\b return} retx, rety\par
+\par
+        {\cf4\b return} retx, rety\par
+\par
+    {\cf4\b def} {\cf8 endGameCheck}({\cf4 self}):\par
+        retx, rety {\cf6 =} ({\cf4 None}, {\cf4 None})\par
+\par
+        {\cf4\b for} t {\cf7\b in} {\cf4 self}{\cf6 .}evaluationSpace:\par
+            x, y {\cf6 =} t\par
+            {\cf4\b for} i {\cf7\b in} {\cf4 range}({\cf6 4}):  {\cf2\i # {\u48169}{\u54693}}\par
+                {\cf4\b for} p {\cf7\b in} AI_ENDGAME_PATTERN1:\par
+                    {\cf4\b if} {\cf4 self}{\cf6 .}patternCheck(x, y, p, i):\par
+                        loc {\cf6 =} p{\cf6 .}index(EMPTY)\par
+                        retx {\cf6 =} x {\cf6 +} dx[i] {\cf6 *} loc\par
+                        rety {\cf6 =} y {\cf6 +} dy[i] {\cf6 *} loc\par
+                        {\cf4\b return} retx, rety\par
+\par
+                {\cf4\b for} p {\cf7\b in} AI_ENDGAME_PATTERN2:\par
+                    {\cf4\b if} {\cf4 self}{\cf6 .}patternCheck(x, y, p, i):\par
+                        loc {\cf6 =} p{\cf6 .}index(EMPTY)\par
+                        loc {\cf6 +}{\cf6 =} p[loc {\cf6 +} {\cf6 1}:]{\cf6 .}index(EMPTY)\par
+                        loc {\cf6 +}{\cf6 =} {\cf6 1}\par
+                        retx {\cf6 =} x {\cf6 +} dx[i] {\cf6 *} loc\par
+                        rety {\cf6 =} y {\cf6 +} dy[i] {\cf6 *} loc\par
+                        {\cf4\b return} retx, rety\par
+\par
+        {\cf4\b return} retx, rety\par
+\par
+    {\cf4\b def} {\cf8 evaluate}({\cf4 self}):\par
+        ai_score {\cf6 =} {\cf6 0}\par
+        player_score {\cf6 =} {\cf6 0}\par
+\par
+        {\cf4\b for} k {\cf7\b in} {\cf4 self}{\cf6 .}evaluationSpace:\par
+            x, y {\cf6 =} k\par
+            {\cf2\i # AI {\u49828}{\u53076}{\u50612} {\u52404}{\u53356}}\par
+            {\cf4\b for} i {\cf7\b in} {\cf4 range}({\cf6 4}):  {\cf2\i # {\u48169}{\u54693}}\par
+                {\cf4\b for} p {\cf7\b in} {\cf4 range}({\cf4 len}(AI_7PATTERNS)):\par
+                    {\cf4\b if} {\cf4 self}{\cf6 .}patternCheck(x, y, AI_7PATTERNS[p], i):\par
+                        ai_score {\cf6 +}{\cf6 =} AI_7PATTERNS_SCORE[p]\par
+\par
+                {\cf4\b for} p {\cf7\b in} {\cf4 range}({\cf4 len}(AI_6PATTERNS)):\par
+                    {\cf4\b if} {\cf4 self}{\cf6 .}patternCheck(x, y, AI_6PATTERNS[p], i):\par
+                        ai_score {\cf6 +}{\cf6 =} AI_6PATTERNS_SCORE[p]\par
+\par
+                {\cf4\b for} p {\cf7\b in} {\cf4 range}({\cf4 len}(AI_5PATTERNS)):\par
+                    {\cf4\b if} {\cf4 self}{\cf6 .}patternCheck(x, y, AI_5PATTERNS[p], i):\par
+                        ai_score {\cf6 +}{\cf6 =} AI_5PATTERNS_SCORE[p]\par
+\par
+                {\cf4\b for} p {\cf7\b in} {\cf4 range}({\cf4 len}(AI_4PATTERNS)):\par
+                    {\cf4\b if} {\cf4 self}{\cf6 .}patternCheck(x, y, AI_4PATTERNS[p], i):\par
+                        ai_score {\cf6 +}{\cf6 =} AI_4PATTERNS_SCORE[p]\par
+\par
+\par
+            {\cf2\i # {\u54540}{\u47112}{\u51060}{\u50612} {\u49828}{\u53076}{\u50612} {\u52404}{\u53356}}\par
+            {\cf4\b for} i {\cf7\b in} {\cf4 range}({\cf6 4}):  {\cf2\i # {\u48169}{\u54693}}\par
+                {\cf4\b for} p {\cf7\b in} {\cf4 range}({\cf4 len}(PLAYER1_7PATTERNS)):\par
+                    {\cf4\b if} {\cf4 self}{\cf6 .}patternCheck(x, y, PLAYER1_7PATTERNS[p], i):\par
+                        player_score {\cf6 +}{\cf6 =} PLAYER1_7PATTERNS_SCORE[p]\par
+\par
+                {\cf4\b for} p {\cf7\b in} {\cf4 range}({\cf4 len}(PLAYER1_6PATTERNS)):\par
+                    {\cf4\b if} {\cf4 self}{\cf6 .}patternCheck(x, y, PLAYER1_6PATTERNS[p], i):\par
+                        player_score {\cf6 +}{\cf6 =} PLAYER1_6PATTERNS_SCORE[p]\par
+\par
+                {\cf4\b for} p {\cf7\b in} {\cf4 range}({\cf4 len}(PLAYER1_5PATTERNS)):\par
+                    {\cf4\b if} {\cf4 self}{\cf6 .}patternCheck(x, y, PLAYER1_5PATTERNS[p], i):\par
+                        player_score {\cf6 +}{\cf6 =} PLAYER1_5PATTERNS_SCORE[p]\par
+\par
+                {\cf4\b for} p {\cf7\b in} {\cf4 range}({\cf4 len}(PLAYER1_4PATTERNS)):\par
+                    {\cf4\b if} {\cf4 self}{\cf6 .}patternCheck(x, y, PLAYER1_4PATTERNS[p], i):\par
+                        player_score {\cf6 +}{\cf6 =} PLAYER1_4PATTERNS_SCORE[p]\par
+\par
+        {\cf4\b return} ai_score {\cf6 -} player_score\par
+\par
+    {\cf4\b def} {\cf8 minmax}({\cf4 self}, depth, player):\par
+        {\cf4\b if} depth {\cf6 ==} {\cf6 0} {\cf7\b or} {\cf4 self}{\cf6 .}stoneCnt {\cf6 ==} GO_BOARD_X_COUNT {\cf6 *} GO_BOARD_Y_COUNT:\par
+            {\cf4\b return} ({\cf4 self}{\cf6 .}evaluate(), {\cf4 None}, {\cf4 None})\par
+        {\cf4\b if} player {\cf6 ==} AI:\par
+            maxValue {\cf6 =} {\cf6 -}INF\par
+            x {\cf6 =} {\cf6 0}\par
+            y {\cf6 =} {\cf6 0}\par
+            {\cf4\b for} k {\cf7\b in} {\cf4 self}{\cf6 .}searchSpace:\par
+                i, j {\cf6 =} k\par
+                {\cf4\b if} {\cf4 self}{\cf6 .}goBoard[i][j] {\cf6 ==} EMPTY:\par
+                    {\cf4 self}{\cf6 .}goBoard[i][j] {\cf6 =} AI\par
+                    ret {\cf6 =} {\cf4 self}{\cf6 .}minmax(depth {\cf6 -} {\cf6 1}, PLAYER1)\par
+                    {\cf4\b if} ret[{\cf6 0}] {\cf6 >} maxValue:\par
+                        maxValue {\cf6 =} ret[{\cf6 0}]\par
+                        x {\cf6 =} i\par
+                        y {\cf6 =} j\par
+                    {\cf4 self}{\cf6 .}goBoard[i][j] {\cf6 =} EMPTY\par
+            {\cf4\b if} depth {\cf6 ==} {\cf6 1}:\par
+                {\cf4\b return} (maxValue, x, y)\par
+            {\cf4\b else}:\par
+                {\cf4\b return} (maxValue, {\cf4 None}, {\cf4 None})\par
+            {\cf4\b pass}\par
+        {\cf4\b else}: {\cf2\i # player == PLAYER1}\par
+            minValue {\cf6 =} INF\par
+            x {\cf6 =} {\cf6 0}\par
+            y {\cf6 =} {\cf6 0}\par
+            {\cf4\b for} k {\cf7\b in} {\cf4 self}{\cf6 .}searchSpace:\par
+                i, j {\cf6 =} k\par
+                {\cf4\b if} {\cf4 self}{\cf6 .}goBoard[i][j] {\cf6 ==} EMPTY:\par
+                    {\cf4 self}{\cf6 .}goBoard[i][j] {\cf6 =} PLAYER1\par
+                    ret {\cf6 =} {\cf4 self}{\cf6 .}minmax(depth {\cf6 -} {\cf6 1}, AI)\par
+                    {\cf4\b if} ret[{\cf6 0}] {\cf6 <} minValue:\par
+                        minValue {\cf6 =} ret[{\cf6 0}]\par
+                        x {\cf6 =} i\par
+                        y {\cf6 =} j\par
+                    {\cf4 self}{\cf6 .}goBoard[i][j] {\cf6 =} EMPTY\par
+            {\cf4\b if} depth {\cf6 ==} {\cf6 1}:\par
+                {\cf4\b return} (minValue, x, y)\par
+            {\cf4\b else}:\par
+                {\cf4\b return} (minValue, {\cf4 None}, {\cf4 None})\par
+            {\cf4\b pass}\par
+\par
+\par
+    {\cf4\b def} {\cf8 placement}({\cf4 self}):\par
+        {\cf4\b print}({\cf15 "}{\cf15 Search space size : }{\cf17\b \\n}{\cf15 "}, {\cf4 len}({\cf4 self}{\cf6 .}searchSpace))\par
+        {\cf4\b print}({\cf15 "}{\cf15 Evaluation space size : }{\cf17\b \\n}{\cf15 "}, {\cf4 len}({\cf4 self}{\cf6 .}evaluationSpace))\par
+\par
+        x, y {\cf6 =} {\cf4 self}{\cf6 .}endGameCheck()\par
+        {\cf4\b if} x {\cf7\b is} {\cf4 None} {\cf7\b and} y {\cf7\b is} {\cf4 None}:\par
+            x, y {\cf6 =} {\cf4 self}{\cf6 .}defenceCheck()\par
+        {\cf4\b if} x {\cf7\b is} {\cf4 None} {\cf7\b and} y {\cf7\b is} {\cf4 None}:\par
+            place {\cf6 =} {\cf4 self}{\cf6 .}minmax({\cf6 1}, AI)\par
+            x {\cf6 =} place[{\cf6 1}]\par
+            y {\cf6 =} place[{\cf6 2}]\par
+\par
+        {\cf4 self}{\cf6 .}goBoard[x][y] {\cf6 =} AI\par
+        {\cf4 self}{\cf6 .}stoneCnt {\cf6 +}{\cf6 =} {\cf6 1}\par
+        {\cf4 self}{\cf6 .}resetEvaluationSpace(x, y)\par
+        {\cf4 self}{\cf6 .}resetSearchSpace(x, y)\par
+        {\cf4\b return} x, y\par
+\par
+    {\cf4\b pass}\par
+}

@@ -110,6 +110,7 @@ def main():
                     pass
                 pass
 
+            # 새 게임 버튼 처리
             if NEW_RECT.collidepoint(mousex, mousey):
                 pygame.mouse.set_cursor(*HAND_CURSOR)
                 if mouseClicked:
@@ -121,17 +122,20 @@ def main():
             pygame.display.update()
         pass
 
+# 프로그램을 종료시키는 함수
 def terminate():
     pygame.quit()
     sys.exit()
     pass
 
+# 텍스트 객체와 그에 대응하는 직사각형 객체를 반환하는 함수
 def makeText(text, color, bgcolor, x, y):
     textSurf = BASICFONT.render(text, True, color, bgcolor)
     textRect = textSurf.get_rect()
     textRect.center = (x, y)
     return (textSurf, textRect)
 
+# 초기 바둑판 2차원 리스트를 반환하는 함수
 def getInitialBoard():
     board = []
     for i in range(GO_BOARD_X_COUNT):
@@ -142,11 +146,13 @@ def getInitialBoard():
         = board[17][17] = RED_STONE
     return board
 
+# 바둑판 좌표를 픽셀 좌표로 변환하여 반환하는 함수
 def getPixelPosOfBoard(boardx, boardy):
     left = GO_BOARD_IMG_X + GO_BOARD_MARGIN + boardx * GO_BOARD_CELL_GAP
     top = GO_BOARD_IMG_Y + GO_BOARD_MARGIN + boardy * GO_BOARD_CELL_GAP
     return (left, top)
 
+# 픽셀 좌표를 바둑판 좌표로 변환하여 반환하는 함수
 def getBoardPosAtPixel(x, y):
     boardx = int((x - TOP_LEFT_X + STONE_RADIUS) / GO_BOARD_CELL_GAP)
     boardy = int((y - TOP_LEFT_Y + STONE_RADIUS) / GO_BOARD_CELL_GAP)
@@ -154,6 +160,7 @@ def getBoardPosAtPixel(x, y):
         return (boardx, boardy)
     return (None, None)
 
+# 바둑판과 새 게임 버튼을 화면에 그리는 함수
 def drawBoard(board, lastX, lastY):
     DISPLAYSURF.blit(GO_BOARD_IMG, (GO_BOARD_IMG_X, GO_BOARD_IMG_Y))
     DISPLAYSURF.blit(NEW_SURF, NEW_RECT)
@@ -173,6 +180,7 @@ def drawBoard(board, lastX, lastY):
     pygame.draw.circle(DISPLAYSURF, GRAY, (left, top), int(STONE_RADIUS/2), 0)
     pass
 
+# 플레이어가 마우스로 위치 시키고 있는 바둑판 좌표를 표시해주는 함수
 def drawPseudoStone(board, x, y):
     left, top = getPixelPosOfBoard(x, y)
     if board[x][y] == EMPTY:
@@ -182,6 +190,7 @@ def drawPseudoStone(board, x, y):
             pygame.draw.circle(DISPLAYSURF, P2_COLOR, (left, top), STONE_RADIUS, 2)
     pass
 
+# 오목 게임의 승패를 판정 하는 함수
 def finishCheck(board, cnt):
     # ↘ 오목 체크
     for x in range(GO_BOARD_X_COUNT - 4):
@@ -230,6 +239,7 @@ def finishCheck(board, cnt):
         return CONTINUE
     pass
 
+# 승패가 결정된 경우 결과를 화면에 표시해주는 함수
 def drawFinishEvent(gameState):
     if gameState == PLAYER1:
         RESULT_SURF, RESULT_RECT = makeText('PLAYER1 WIN', BLACK, WHITE, WINDOWWIDTH - 170, 90)
@@ -242,6 +252,7 @@ def drawFinishEvent(gameState):
     pygame.display.update()
     pass
 
+# 승패가 결정된 뒤 사용자가 새 게임 버튼을 누를 때까지 기다리는 함수
 def waitForNewGame():
     mousex = 0
     mousey = 0

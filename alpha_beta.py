@@ -202,12 +202,14 @@ class Ai7:
                 i, j = k
                 if self.goBoard[i][j] == EMPTY:
                     self.goBoard[i][j] = AI
+                    self.stoneCnt += 1
                     ret = self.minmaxWithAlphaBeta(alpha, beta, depth - 1, PLAYER1)
                     if ret[0] > maxValue:
                         maxValue = ret[0]
                         x = i
                         y = j
                         alpha = max(alpha, maxValue)
+                    self.stoneCnt -= 1
                     self.goBoard[i][j] = EMPTY
                     if beta <= alpha:  # Beta Cut
                         break
