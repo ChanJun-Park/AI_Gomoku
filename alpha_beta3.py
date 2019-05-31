@@ -1,15 +1,5 @@
-from gomoku_constant import *
-from evaluate import *
-import copy
+from evaluation_constant import *
 import random
-
-HORIZONTAL = 0
-VERTICAL = 1
-MAIN_DIAGONAL = 2
-SUB_DIAGONAL = 3
-
-dx = (1, 0, 1, -1)
-dy = (0, 1, 1,  1)
 
 
 class Ai10:
@@ -20,7 +10,7 @@ class Ai10:
         self.searchSpace = []
         self.evaluationSpaceState, self.evaluationSpace = self.getInitialEvaluationSpace()
         self.stoneCnt = 1
-        self.searchSize = 30
+        self.searchSize = 20
         pass
 
     def getInitialCandidateSpace(self):

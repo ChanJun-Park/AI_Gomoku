@@ -64,3 +64,12 @@ CONTINUE = 3
 DRAW = 4
 
 INF = 2000000000
+
+# 패턴 확인이 탐색 방향
+HORIZONTAL = 0
+VERTICAL = 1
+MAIN_DIAGONAL = 2
+SUB_DIAGONAL = 3
+
+dx = (1, 0, 1, -1)
+dy = (0, 1, 1,  1)

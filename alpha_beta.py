@@ -1,15 +1,7 @@
 from gomoku_constant import *
-from evaluate import *
+from evaluation_constant import *
 import copy
 import random
-
-HORIZONTAL = 0
-VERTICAL = 1
-MAIN_DIAGONAL = 2
-SUB_DIAGONAL = 3
-
-dx = (1, 0, 1, -1)
-dy = (0, 1, 1,  1)
 
 
 class Ai7:

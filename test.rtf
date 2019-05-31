@@ -1,0 +1,357 @@
+{\rtf1\ansi\uc0\deff0{\fonttbl{\f0\fmodern\fprq1\fcharset0;}}{\colortbl;\red187\green187\blue187;\red64\green128\blue128;\red188\green122\blue0;\red0\green128\blue0;\red176\green0\blue64;\red102\green102\blue102;\red170\green34\blue255;\red0\green0\blue255;\red210\green65\blue58;\red25\green23\blue124;\red136\green0\blue0;\red160\green160\blue0;\red153\green153\blue153;\red125\green144\blue41;\red186\green33\blue33;\red187\green102\blue136;\red187\green102\blue34;\red0\green0\blue128;\red128\green0\blue128;\red160\green0\blue0;\red0\green160\blue0;\red255\green0\blue0;\red136\green136\blue136;\red0\green68\blue221;}\f0 {\cf2\i # TODO 3 x 3 {\u48152}{\u52825} on/off {\u44592}{\u45733} {\u44396}{\u54788}}\par
+\par
+{\cf4\b import} {\cf8\b pygame}{\cf6 ,} {\cf8\b sys}\par
+{\cf4\b from} {\cf8\b pygame.locals} {\cf4\b import} {\cf6 *}\par
+{\cf4\b from} {\cf8\b gomoku_constant} {\cf4\b import} {\cf6 *}\par
+{\cf4\b import} {\cf8\b minmax}\par
+{\cf4\b import} {\cf8\b alpha_beta}\par
+{\cf4\b import} {\cf8\b alpha_beta3}\par
+\par
+{\cf4\b def} {\cf8 main}():\par
+    {\cf4\b global} DISPLAYSURF, BASICFONT,\\\par
+    STONE_SELECT_SURF, STONE_SELECT_RECT, \\\par
+    NEW_SURF, NEW_RECT, \\\par
+    TURN_SURF, TURN_RECT, \\\par
+    P1_COLOR, P2_COLOR\par
+\par
+    {\cf4\b global} turn\par
+\par
+    pygame{\cf6 .}init()\par
+    DISPLAYSURF {\cf6 =} pygame{\cf6 .}display{\cf6 .}set_mode((WINDOWWIDTH, WINDOWHEIGHT))\par
+\par
+    pygame{\cf6 .}display{\cf6 .}set_caption({\cf15 '}{\cf15 Go Board Test}{\cf15 '})\par
+\par
+    BASICFONT {\cf6 =} pygame{\cf6 .}font{\cf6 .}Font({\cf15 '}{\cf15 freesansbold.ttf}{\cf15 '}, BASICFONTSIZE)\par
+    NEW_SURF, NEW_RECT {\cf6 =} makeText({\cf15 '}{\cf15 New}{\cf15 '}, BLACK, WHITE, WINDOWWIDTH {\cf6 -} {\cf6 120}, WINDOWHEIGHT {\cf6 -} {\cf6 90})\par
+\par
+    {\cf2\i # {\u49352} {\u44172}{\u51076} {\u45800}{\u50948} {\u47336}{\u54532}}\par
+    {\cf4\b while} {\cf4 True}:\par
+        P1_COLOR, P2_COLOR {\cf6 =} selectStoneColor()\par
+        {\cf4\b if} P1_COLOR {\cf6 ==} BLACK:\par
+            turn {\cf6 =} PLAYER1\par
+        {\cf4\b else}:\par
+            turn {\cf6 =} PLAYER2\par
+\par
+        {\cf2\i # {\u48148}{\u46161}{\u46028}{\u51032} {\u49345}{\u53468}{\u47484} {\u51200}{\u51109}{\u54616}{\u45716} 2{\u52264}{\u50896} {\u47532}{\u49828}{\u53944}}\par
+        goBoard {\cf6 =} getInitialBoard()\par
+\par
+\par
+        {\cf2\i # {\u55121}{\u46028}({\u49440}{\u49688}) {\u52376}{\u47532}}\par
+        goBoard[{\cf4 int}(GO_BOARD_X_COUNT {\cf6 /} {\cf6 2})][{\cf4 int}(GO_BOARD_Y_COUNT {\cf6 /} {\cf6 2})] {\cf6 =} turn\par
+        turn {\cf6 =} (PLAYER1 {\cf4\b if} turn {\cf6 ==} PLAYER2 {\cf4\b else} PLAYER2)\par
+\par
+        stoneCnt {\cf6 =} {\cf6 1}\par
+\par
+        mousex {\cf6 =} {\cf6 0}\par
+        mousey {\cf6 =} {\cf6 0}\par
+\par
+        {\cf2\i # {\u47560}{\u51648}{\u47561}{\u50640} {\u52265}{\u49688}{\u46108} {\u51340}{\u54364}}\par
+        lastx {\cf6 =} {\cf4 int}(GO_BOARD_X_COUNT {\cf6 /} {\cf6 2})\par
+        lasty {\cf6 =} {\cf4 int}(GO_BOARD_Y_COUNT {\cf6 /} {\cf6 2})\par
+\par
+        drawBoard(goBoard, lastx, lasty)\par
+\par
+        {\cf2\i # AI {\u44061}{\u52404} {\u49373}{\u49457} ({\u50668}{\u44592}{\u49436} {\u45212}{\u51060}{\u46020} {\u51312}{\u51208}?)}\par
+        ai {\cf6 =} {\cf4 None}\par
+        level {\cf6 =} selectLevel()\par
+        {\cf4\b if} level {\cf6 ==} {\cf6 1}:\par
+            ai {\cf6 =} minmax{\cf6 .}Ai1(goBoard)\par
+        {\cf4\b elif} level {\cf6 ==} {\cf6 2}:\par
+            ai {\cf6 =} alpha_beta{\cf6 .}Ai7(goBoard)\par
+        {\cf4\b else}:\par
+            ai {\cf6 =} alpha_beta3{\cf6 .}Ai10(goBoard)\par
+\par
+        ai{\cf6 .}resetEvaluationSpace(lastx, lasty)\par
+        ai{\cf6 .}resetSearchSpace(lastx, lasty)\par
+\par
+        {\cf2\i # {\u47700}{\u51064} {\u44172}{\u51076} {\u47336}{\u54532}}\par
+        {\cf4\b while} {\cf4 True}:\par
+            DISPLAYSURF{\cf6 .}fill(BGCOLOR)\par
+            drawBoard(goBoard, lastx, lasty)\par
+\par
+            {\cf2\i # {\u44172}{\u51076} {\u49849}{\u54056} {\u54032}{\u51221}}\par
+            gameState {\cf6 =} finishCheck(goBoard, stoneCnt)\par
+            {\cf4\b if} gameState {\cf6 !=} CONTINUE:\par
+                drawFinishEvent(gameState)\par
+                waitForNewGame()\par
+                {\cf4\b break}\par
+\par
+            {\cf2\i #AI {\u52264}{\u47168} {\u52376}{\u47532}}\par
+            {\cf4\b if} turn {\cf6 ==} PLAYER2:\par
+                lastx, lasty {\cf6 =} ai{\cf6 .}placement()\par
+                stoneCnt {\cf6 +}{\cf6 =} {\cf6 1}\par
+                turn {\cf6 =} (PLAYER1 {\cf4\b if} turn {\cf6 ==} PLAYER2 {\cf4\b else} PLAYER2)\par
+                {\cf4\b continue}\par
+\par
+            mouseClicked {\cf6 =} {\cf4 False}\par
+            {\cf4\b for} event {\cf7\b in} pygame{\cf6 .}event{\cf6 .}get():\par
+                {\cf4\b if} event{\cf6 .}type {\cf6 ==} QUIT:\par
+                    terminate()\par
+                {\cf4\b elif} event{\cf6 .}type {\cf6 ==} MOUSEMOTION:\par
+                    mousex, mousey {\cf6 =} event{\cf6 .}pos\par
+                {\cf4\b elif} event{\cf6 .}type {\cf6 ==} MOUSEBUTTONDOWN:\par
+                    mousex, mousey {\cf6 =} event{\cf6 .}pos\par
+                    mouseClicked {\cf6 =} {\cf4 True}\par
+\par
+            {\cf2\i # {\u48148}{\u46161}{\u54032} {\u50948}{\u51032} {\u51340}{\u54364}}\par
+            boardx, boardy {\cf6 =} getBoardPosAtPixel(mousex, mousey)\par
+            {\cf4\b if} boardx {\cf6 !=} {\cf4 None} {\cf7\b and} boardy {\cf6 !=} {\cf4 None}:\par
+                {\cf4\b if} {\cf7\b not} goBoard[boardx][boardy]:\par
+                    drawPseudoStone(goBoard, boardx, boardy)\par
+                {\cf4\b if} {\cf7\b not} goBoard[boardx][boardy] {\cf7\b and} mouseClicked:\par
+                    lastx {\cf6 =} boardx\par
+                    lasty {\cf6 =} boardy\par
+                    goBoard[boardx][boardy] {\cf6 =} turn\par
+                    stoneCnt {\cf6 +}{\cf6 =} {\cf6 1}\par
+                    ai{\cf6 .}stoneCnt {\cf6 +}{\cf6 =} {\cf6 1}\par
+                    ai{\cf6 .}resetEvaluationSpace(boardx, boardy)\par
+                    ai{\cf6 .}resetSearchSpace(boardx, boardy)\par
+                    turn {\cf6 =} (PLAYER1 {\cf4\b if} turn {\cf6 ==} PLAYER2 {\cf4\b else} PLAYER2)\par
+                    {\cf4\b pass}\par
+                {\cf4\b pass}\par
+\par
+            {\cf4\b if} NEW_RECT{\cf6 .}collidepoint(mousex, mousey):\par
+                pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}HAND_CURSOR)\par
+                {\cf4\b if} mouseClicked:\par
+                    pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}pygame{\cf6 .}cursors{\cf6 .}arrow)\par
+                    {\cf4\b break}\par
+            {\cf4\b else}:\par
+                pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}pygame{\cf6 .}cursors{\cf6 .}arrow)\par
+\par
+            pygame{\cf6 .}display{\cf6 .}update()\par
+        {\cf4\b pass}\par
+\par
+{\cf4\b def} {\cf8 terminate}():\par
+    pygame{\cf6 .}quit()\par
+    sys{\cf6 .}exit()\par
+    {\cf4\b pass}\par
+\par
+{\cf4\b def} {\cf8 makeText}(text, color, bgcolor, x, y):\par
+    textSurf {\cf6 =} BASICFONT{\cf6 .}render(text, {\cf4 True}, color, bgcolor)\par
+    textRect {\cf6 =} textSurf{\cf6 .}get_rect()\par
+    textRect{\cf6 .}center {\cf6 =} (x, y)\par
+    {\cf4\b return} (textSurf, textRect)\par
+\par
+{\cf4\b def} {\cf8 getInitialBoard}():\par
+    board {\cf6 =} []\par
+    {\cf4\b for} i {\cf7\b in} {\cf4 range}(GO_BOARD_X_COUNT):\par
+        board{\cf6 .}append([EMPTY] {\cf6 *} GO_BOARD_Y_COUNT)\par
+    board[{\cf6 10}][{\cf6 9}] {\cf6 =} board[{\cf6 2}][{\cf6 1}] {\cf6 =} board[{\cf6 2}][{\cf6 9}]\\\par
+        {\cf6 =} board[{\cf6 3}][{\cf6 15}] {\cf6 =} board[{\cf6 5}][{\cf6 4}] {\cf6 =} board[{\cf6 11}][{\cf6 4}]\\\par
+        {\cf6 =} board[{\cf6 11}][{\cf6 16}] {\cf6 =} board[{\cf6 15}][{\cf6 2}] {\cf6 =} board[{\cf6 14}][{\cf6 12}]\\\par
+        {\cf6 =} board[{\cf6 17}][{\cf6 17}] {\cf6 =} RED_STONE\par
+    {\cf4\b return} board\par
+\par
+{\cf4\b def} {\cf8 getPixelPosOfBoard}(boardx, boardy):\par
+    left {\cf6 =} GO_BOARD_IMG_X {\cf6 +} GO_BOARD_MARGIN {\cf6 +} boardx {\cf6 *} GO_BOARD_CELL_GAP\par
+    top {\cf6 =} GO_BOARD_IMG_Y {\cf6 +} GO_BOARD_MARGIN {\cf6 +} boardy {\cf6 *} GO_BOARD_CELL_GAP\par
+    {\cf4\b return} (left, top)\par
+\par
+{\cf4\b def} {\cf8 getBoardPosAtPixel}(x, y):\par
+    boardx {\cf6 =} {\cf4 int}((x {\cf6 -} TOP_LEFT_X {\cf6 +} STONE_RADIUS) {\cf6 /} GO_BOARD_CELL_GAP)\par
+    boardy {\cf6 =} {\cf4 int}((y {\cf6 -} TOP_LEFT_Y {\cf6 +} STONE_RADIUS) {\cf6 /} GO_BOARD_CELL_GAP)\par
+    {\cf4\b if} boardx {\cf6 >}{\cf6 =} {\cf6 0} {\cf7\b and} boardx {\cf6 <} {\cf6 19} {\cf7\b and} boardy {\cf6 >}{\cf6 =}{\cf6 0} {\cf7\b and} boardy {\cf6 <} {\cf6 19}:\par
+        {\cf4\b return} (boardx, boardy)\par
+    {\cf4\b return} ({\cf4 None}, {\cf4 None})\par
+\par
+{\cf4\b def} {\cf8 drawBoard}(board, lastX, lastY):\par
+    DISPLAYSURF{\cf6 .}blit(GO_BOARD_IMG, (GO_BOARD_IMG_X, GO_BOARD_IMG_Y))\par
+    DISPLAYSURF{\cf6 .}blit(NEW_SURF, NEW_RECT)\par
+    {\cf4\b for} x {\cf7\b in} {\cf4 range}(GO_BOARD_X_COUNT):\par
+        {\cf4\b for} y {\cf7\b in} {\cf4 range}(GO_BOARD_Y_COUNT):\par
+            left, top {\cf6 =} getPixelPosOfBoard(x, y)\par
+            {\cf4\b if} board[x][y] {\cf6 ==} PLAYER1:\par
+                pygame{\cf6 .}draw{\cf6 .}circle(DISPLAYSURF, P1_COLOR, (left, top), STONE_RADIUS, {\cf6 0})\par
+                {\cf4\b pass}\par
+            {\cf4\b elif} board[x][y] {\cf6 ==} PLAYER2:\par
+                pygame{\cf6 .}draw{\cf6 .}circle(DISPLAYSURF, P2_COLOR, (left, top), STONE_RADIUS, {\cf6 0})\par
+                {\cf4\b pass}\par
+            {\cf4\b elif} board[x][y] {\cf6 ==} RED_STONE:\par
+                pygame{\cf6 .}draw{\cf6 .}circle(DISPLAYSURF, RED, (left, top), STONE_RADIUS, {\cf6 0})\par
+                {\cf4\b pass}\par
+    left, top {\cf6 =} getPixelPosOfBoard(lastX, lastY)\par
+    pygame{\cf6 .}draw{\cf6 .}circle(DISPLAYSURF, GRAY, (left, top), {\cf4 int}(STONE_RADIUS{\cf6 /}{\cf6 2}), {\cf6 0})\par
+    {\cf4\b pass}\par
+\par
+{\cf4\b def} {\cf8 drawPseudoStone}(board, x, y):\par
+    left, top {\cf6 =} getPixelPosOfBoard(x, y)\par
+    {\cf4\b if} board[x][y] {\cf6 ==} EMPTY:\par
+        {\cf4\b if} turn {\cf6 ==} PLAYER1:\par
+            pygame{\cf6 .}draw{\cf6 .}circle(DISPLAYSURF, P1_COLOR, (left, top), STONE_RADIUS, {\cf6 2})\par
+        {\cf4\b else}: {\cf2\i # turn == PLAYER2}\par
+            pygame{\cf6 .}draw{\cf6 .}circle(DISPLAYSURF, P2_COLOR, (left, top), STONE_RADIUS, {\cf6 2})\par
+    {\cf4\b pass}\par
+\par
+{\cf4\b def} {\cf8 finishCheck}(board, cnt):\par
+    {\cf2\i # {\u8600} {\u50724}{\u47785} {\u52404}{\u53356}}\par
+    {\cf4\b for} x {\cf7\b in} {\cf4 range}(GO_BOARD_X_COUNT {\cf6 -} {\cf6 4}):\par
+        {\cf4\b for} y {\cf7\b in} {\cf4 range}(GO_BOARD_Y_COUNT {\cf6 -} {\cf6 4}):\par
+            {\cf4\b if}(board[x][y]{\cf6 ==}PLAYER1 {\cf7\b and} board[x{\cf6 +}{\cf6 1}][y{\cf6 +}{\cf6 1}]{\cf6 ==}PLAYER1 {\cf7\b and} board[x{\cf6 +}{\cf6 2}][y{\cf6 +}{\cf6 2}]{\cf6 ==}PLAYER1\\\par
+                    {\cf7\b and} board[x{\cf6 +}{\cf6 3}][y{\cf6 +}{\cf6 3}]{\cf6 ==}PLAYER1 {\cf7\b and} board[x{\cf6 +}{\cf6 4}][y{\cf6 +}{\cf6 4}]{\cf6 ==}PLAYER1) :\par
+                {\cf4\b return} PLAYER1\par
+            {\cf4\b elif}(board[x][y]{\cf6 ==}PLAYER2 {\cf7\b and} board[x{\cf6 +}{\cf6 1}][y{\cf6 +}{\cf6 1}]{\cf6 ==}PLAYER2 {\cf7\b and} board[x{\cf6 +}{\cf6 2}][y{\cf6 +}{\cf6 2}]{\cf6 ==}PLAYER2\\\par
+                    {\cf7\b and} board[x{\cf6 +}{\cf6 3}][y{\cf6 +}{\cf6 3}]{\cf6 ==}PLAYER2 {\cf7\b and} board[x{\cf6 +}{\cf6 4}][y{\cf6 +}{\cf6 4}]{\cf6 ==}PLAYER2) :\par
+                {\cf4\b return} PLAYER2\par
+\par
+    {\cf2\i # {\u8594} {\u50724}{\u47785} {\u52404}{\u53356}}\par
+    {\cf4\b for} x {\cf7\b in} {\cf4 range}(GO_BOARD_X_COUNT {\cf6 -} {\cf6 4}):\par
+        {\cf4\b for} y {\cf7\b in} {\cf4 range}(GO_BOARD_Y_COUNT):\par
+            {\cf4\b if} (board[x][y] {\cf6 ==} PLAYER1 {\cf7\b and} board[x {\cf6 +} {\cf6 1}][y] {\cf6 ==} PLAYER1 {\cf7\b and} board[x {\cf6 +} {\cf6 2}][y] {\cf6 ==} PLAYER1 \\\par
+                    {\cf7\b and} board[x {\cf6 +} {\cf6 3}][y] {\cf6 ==} PLAYER1 {\cf7\b and} board[x {\cf6 +} {\cf6 4}][y] {\cf6 ==} PLAYER1):\par
+                {\cf4\b return} PLAYER1\par
+            {\cf4\b elif} (board[x][y] {\cf6 ==} PLAYER2 {\cf7\b and} board[x {\cf6 +} {\cf6 1}][y] {\cf6 ==} PLAYER2 {\cf7\b and} board[x {\cf6 +} {\cf6 2}][y] {\cf6 ==} PLAYER2 \\\par
+                  {\cf7\b and} board[x {\cf6 +} {\cf6 3}][y] {\cf6 ==} PLAYER2 {\cf7\b and} board[x {\cf6 +} {\cf6 4}][y] {\cf6 ==} PLAYER2):\par
+                {\cf4\b return} PLAYER2\par
+\par
+    {\cf2\i # {\u8595} {\u50724}{\u47785} {\u52404}{\u53356}}\par
+    {\cf4\b for} x {\cf7\b in} {\cf4 range}(GO_BOARD_X_COUNT):\par
+        {\cf4\b for} y {\cf7\b in} {\cf4 range}(GO_BOARD_Y_COUNT {\cf6 -} {\cf6 4}):\par
+            {\cf4\b if} (board[x][y] {\cf6 ==} PLAYER1 {\cf7\b and} board[x][y {\cf6 +} {\cf6 1}] {\cf6 ==} PLAYER1 {\cf7\b and} board[x][y {\cf6 +} {\cf6 2}] {\cf6 ==} PLAYER1 \\\par
+                    {\cf7\b and} board[x][y {\cf6 +} {\cf6 3}] {\cf6 ==} PLAYER1 {\cf7\b and} board[x][y {\cf6 +} {\cf6 4}] {\cf6 ==} PLAYER1):\par
+                {\cf4\b return} PLAYER1\par
+            {\cf4\b elif} (board[x][y] {\cf6 ==} PLAYER2 {\cf7\b and} board[x][y {\cf6 +} {\cf6 1}] {\cf6 ==} PLAYER2 {\cf7\b and} board[x][y {\cf6 +} {\cf6 2}] {\cf6 ==} PLAYER2 \\\par
+                  {\cf7\b and} board[x][y {\cf6 +} {\cf6 3}] {\cf6 ==} PLAYER2 {\cf7\b and} board[x][y {\cf6 +} {\cf6 4}] {\cf6 ==} PLAYER2):\par
+                {\cf4\b return} PLAYER2\par
+\par
+    {\cf2\i # {\u8601} {\u50724}{\u47785} {\u52404}{\u53356}}\par
+    {\cf4\b for} x {\cf7\b in} {\cf4 range}({\cf6 4}, GO_BOARD_X_COUNT):\par
+        {\cf4\b for} y {\cf7\b in} {\cf4 range}(GO_BOARD_Y_COUNT {\cf6 -} {\cf6 4}):\par
+            {\cf4\b if} (board[x][y] {\cf6 ==} PLAYER1 {\cf7\b and} board[x {\cf6 -} {\cf6 1}][y {\cf6 +} {\cf6 1}] {\cf6 ==} PLAYER1 {\cf7\b and} board[x {\cf6 -} {\cf6 2}][y {\cf6 +} {\cf6 2}] {\cf6 ==} PLAYER1 \\\par
+                    {\cf7\b and} board[x {\cf6 -} {\cf6 3}][y {\cf6 +} {\cf6 3}] {\cf6 ==} PLAYER1 {\cf7\b and} board[x {\cf6 -} {\cf6 4}][y {\cf6 +} {\cf6 4}] {\cf6 ==} PLAYER1):\par
+                {\cf4\b return} PLAYER1\par
+            {\cf4\b elif} (board[x][y] {\cf6 ==} PLAYER2 {\cf7\b and} board[x {\cf6 -} {\cf6 1}][y {\cf6 +} {\cf6 1}] {\cf6 ==} PLAYER2 {\cf7\b and} board[x {\cf6 -} {\cf6 2}][y {\cf6 +} {\cf6 2}] {\cf6 ==} PLAYER2 \\\par
+                  {\cf7\b and} board[x {\cf6 -} {\cf6 3}][y {\cf6 +} {\cf6 3}] {\cf6 ==} PLAYER2 {\cf7\b and} board[x {\cf6 -} {\cf6 4}][y {\cf6 +} {\cf6 4}] {\cf6 ==} PLAYER2):\par
+                {\cf4\b return} PLAYER2\par
+\par
+    {\cf2\i # {\u47924}{\u49849}{\u48512} {\u54032}{\u51221}}\par
+    {\cf4\b if} cnt {\cf6 ==} GO_BOARD_X_COUNT {\cf6 *} GO_BOARD_Y_COUNT:\par
+        {\cf4\b return} DRAW\par
+    {\cf4\b else}:\par
+        {\cf4\b return} CONTINUE\par
+    {\cf4\b pass}\par
+\par
+{\cf4\b def} {\cf8 drawFinishEvent}(gameState):\par
+    {\cf4\b if} gameState {\cf6 ==} PLAYER1:\par
+        RESULT_SURF, RESULT_RECT {\cf6 =} makeText({\cf15 '}{\cf15 PLAYER1 WIN}{\cf15 '}, BLACK, WHITE, WINDOWWIDTH {\cf6 -} {\cf6 170}, {\cf6 90})\par
+    {\cf4\b elif} gameState {\cf6 ==} PLAYER2:\par
+        RESULT_SURF, RESULT_RECT {\cf6 =} makeText({\cf15 '}{\cf15 PLAYER2(AI) WIN}{\cf15 '}, BLACK, WHITE, WINDOWWIDTH {\cf6 -} {\cf6 170}, {\cf6 90})\par
+    {\cf4\b elif} gameState {\cf6 ==} DRAW:\par
+        RESULT_SURF, RESULT_RECT {\cf6 =} makeText({\cf15 '}{\cf15 DRAW}{\cf15 '}, BLACK, WHITE, WINDOWWIDTH {\cf6 -} {\cf6 170}, {\cf6 90})\par
+\par
+    DISPLAYSURF{\cf6 .}blit(RESULT_SURF, RESULT_RECT)\par
+    pygame{\cf6 .}display{\cf6 .}update()\par
+    {\cf4\b pass}\par
+\par
+{\cf4\b def} {\cf8 waitForNewGame}():\par
+    mousex {\cf6 =} {\cf6 0}\par
+    mousey {\cf6 =} {\cf6 0}\par
+    {\cf4\b while} {\cf4 True}:\par
+        mouseClicked {\cf6 =} {\cf4 False}\par
+        {\cf4\b for} event {\cf7\b in} pygame{\cf6 .}event{\cf6 .}get():\par
+            {\cf4\b if} event{\cf6 .}type {\cf6 ==} QUIT:\par
+                terminate()\par
+            {\cf4\b elif} event{\cf6 .}type {\cf6 ==} MOUSEMOTION:\par
+                mousex, mousey {\cf6 =} event{\cf6 .}pos\par
+            {\cf4\b elif} event{\cf6 .}type {\cf6 ==} MOUSEBUTTONDOWN:\par
+                mousex, mousey {\cf6 =} event{\cf6 .}pos\par
+                mouseClicked {\cf6 =} {\cf4 True}\par
+\par
+        {\cf4\b if} NEW_RECT{\cf6 .}collidepoint(mousex, mousey):\par
+            pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}HAND_CURSOR)\par
+            {\cf4\b if} mouseClicked:\par
+                pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}pygame{\cf6 .}cursors{\cf6 .}arrow)\par
+                {\cf4\b break}\par
+        {\cf4\b else}:\par
+            pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}pygame{\cf6 .}cursors{\cf6 .}arrow)\par
+    {\cf4\b pass}\par
+\par
+{\cf2\i # player1, player2 {\u51032} {\u46028}{\u51032} {\u49353}{\u44628}{\u51012} {\u49440}{\u53469}{\u54616}{\u50668} {\u48152}{\u54872}{\u54644}{\u51456}{\u45796}.}\par
+{\cf4\b def} {\cf8 selectStoneColor}():\par
+    pygame{\cf6 .}draw{\cf6 .}rect(DISPLAYSURF, GRAY, (WINDOWWIDTH{\cf6 /}{\cf6 2} {\cf6 -} {\cf6 200}, WINDOWHEIGHT{\cf6 /}{\cf6 2} {\cf6 -} {\cf6 200}, {\cf6 400}, {\cf6 400}))\par
+    OPTION_BLACK_SURF, OPTION_BLACK_RECT {\cf6 =} makeText({\cf15 '}{\cf15 Black}{\cf15 '}, BLACK, GRAY, WINDOWWIDTH {\cf6 /} {\cf6 2}, WINDOWHEIGHT {\cf6 /} {\cf6 2} {\cf6 -} {\cf6 50})\par
+    OPTION_WHITE_SURF, OPTION_WHITE_RECT {\cf6 =} makeText({\cf15 '}{\cf15 White}{\cf15 '}, BLACK, GRAY, WINDOWWIDTH {\cf6 /} {\cf6 2}, WINDOWHEIGHT {\cf6 /} {\cf6 2} {\cf6 +} {\cf6 50})\par
+    DISPLAYSURF{\cf6 .}blit(OPTION_BLACK_SURF, OPTION_BLACK_RECT)\par
+    DISPLAYSURF{\cf6 .}blit(OPTION_WHITE_SURF, OPTION_WHITE_RECT)\par
+    pygame{\cf6 .}display{\cf6 .}update()\par
+\par
+    mousex {\cf6 =} {\cf6 0}\par
+    mousey {\cf6 =} {\cf6 0}\par
+\par
+    mouseClicked {\cf6 =} {\cf4 False}\par
+\par
+    {\cf2\i # {\u47560}{\u50864}{\u49828} {\u51077}{\u47141}{\u51012} {\u48155}{\u51012} {\u46412}{\u44620}{\u51648} {\u45824}{\u44592}}\par
+    {\cf4\b while} {\cf4 True}:\par
+        {\cf4\b for} event {\cf7\b in} pygame{\cf6 .}event{\cf6 .}get():\par
+            {\cf4\b if} event{\cf6 .}type {\cf6 ==} QUIT:\par
+                terminate()\par
+            {\cf4\b elif} event{\cf6 .}type {\cf6 ==} MOUSEMOTION:\par
+                mousex, mousey {\cf6 =} event{\cf6 .}pos\par
+            {\cf4\b elif} event{\cf6 .}type {\cf6 ==} MOUSEBUTTONDOWN:\par
+                mouseClicked {\cf6 =} {\cf4 True}\par
+                mousex, mousey {\cf6 =} event{\cf6 .}pos\par
+\par
+\par
+        {\cf4\b if} OPTION_BLACK_RECT{\cf6 .}collidepoint(mousex, mousey):\par
+            pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}HAND_CURSOR)\par
+            {\cf4\b if} mouseClicked:\par
+                pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}pygame{\cf6 .}cursors{\cf6 .}arrow)\par
+                {\cf4\b return} (BLACK, WHITE)\par
+        {\cf4\b elif} OPTION_WHITE_RECT{\cf6 .}collidepoint(mousex, mousey):\par
+            pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}HAND_CURSOR)\par
+            {\cf4\b if} mouseClicked:\par
+                pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}pygame{\cf6 .}cursors{\cf6 .}arrow)\par
+                {\cf4\b return} (WHITE, BLACK)\par
+        {\cf4\b else}:\par
+            pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}pygame{\cf6 .}cursors{\cf6 .}arrow)\par
+    {\cf4\b pass}\par
+\par
+{\cf2\i # {\u44172}{\u51076}{\u51032} {\u45212}{\u51060}{\u46020}{\u47484} {\u49440}{\u53469}{\u54616}{\u50668} {\u48152}{\u54872}}\par
+{\cf4\b def} {\cf8 selectLevel}():\par
+    pygame{\cf6 .}draw{\cf6 .}rect(DISPLAYSURF, GRAY, (WINDOWWIDTH {\cf6 /} {\cf6 2} {\cf6 -} {\cf6 200}, WINDOWHEIGHT {\cf6 /} {\cf6 2} {\cf6 -} {\cf6 200}, {\cf6 400}, {\cf6 400}))\par
+    LEVEL_ONE_SURF, LEVEL_ONE_RECT {\cf6 =} makeText({\cf15 '}{\cf15 Level 1}{\cf15 '}, BLACK, GRAY, WINDOWWIDTH {\cf6 /} {\cf6 2}, WINDOWHEIGHT {\cf6 /} {\cf6 2} {\cf6 -} {\cf6 50})\par
+    LEVEL_TWO_SURF, LEVEL_TWO_RECT {\cf6 =} makeText({\cf15 '}{\cf15 Level 2}{\cf15 '}, BLACK, GRAY, WINDOWWIDTH {\cf6 /} {\cf6 2}, WINDOWHEIGHT {\cf6 /} {\cf6 2})\par
+    LEVEL_THREE_SURF, LEVEL_THREE_RECT {\cf6 =} makeText({\cf15 '}{\cf15 Level 3}{\cf15 '}, BLACK, GRAY, WINDOWWIDTH {\cf6 /} {\cf6 2}, WINDOWHEIGHT {\cf6 /} {\cf6 2} {\cf6 +} {\cf6 50})\par
+    DISPLAYSURF{\cf6 .}blit(LEVEL_ONE_SURF, LEVEL_ONE_RECT)\par
+    DISPLAYSURF{\cf6 .}blit(LEVEL_TWO_SURF, LEVEL_TWO_RECT)\par
+    DISPLAYSURF{\cf6 .}blit(LEVEL_THREE_SURF, LEVEL_THREE_RECT)\par
+    pygame{\cf6 .}display{\cf6 .}update()\par
+\par
+    mousex {\cf6 =} {\cf6 0}\par
+    mousey {\cf6 =} {\cf6 0}\par
+\par
+    mouseClicked {\cf6 =} {\cf4 False}\par
+\par
+    {\cf2\i # {\u47560}{\u50864}{\u49828} {\u51077}{\u47141}{\u51012} {\u48155}{\u51012} {\u46412}{\u44620}{\u51648} {\u45824}{\u44592}}\par
+    {\cf4\b while} {\cf4 True}:\par
+        {\cf4\b for} event {\cf7\b in} pygame{\cf6 .}event{\cf6 .}get():\par
+            {\cf4\b if} event{\cf6 .}type {\cf6 ==} QUIT:\par
+                terminate()\par
+            {\cf4\b elif} event{\cf6 .}type {\cf6 ==} MOUSEMOTION:\par
+                mousex, mousey {\cf6 =} event{\cf6 .}pos\par
+            {\cf4\b elif} event{\cf6 .}type {\cf6 ==} MOUSEBUTTONDOWN:\par
+                mouseClicked {\cf6 =} {\cf4 True}\par
+                mousex, mousey {\cf6 =} event{\cf6 .}pos\par
+\par
+        {\cf4\b if} LEVEL_ONE_RECT{\cf6 .}collidepoint(mousex, mousey):\par
+            pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}HAND_CURSOR)\par
+            {\cf4\b if} mouseClicked:\par
+                pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}pygame{\cf6 .}cursors{\cf6 .}arrow)\par
+                {\cf4\b return} {\cf6 1}\par
+        {\cf4\b elif} LEVEL_TWO_RECT{\cf6 .}collidepoint(mousex, mousey):\par
+            pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}HAND_CURSOR)\par
+            {\cf4\b if} mouseClicked:\par
+                pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}pygame{\cf6 .}cursors{\cf6 .}arrow)\par
+                {\cf4\b return} {\cf6 2}\par
+        {\cf4\b elif} LEVEL_THREE_RECT{\cf6 .}collidepoint(mousex, mousey):\par
+            pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}HAND_CURSOR)\par
+            {\cf4\b if} mouseClicked:\par
+                pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}pygame{\cf6 .}cursors{\cf6 .}arrow)\par
+                {\cf4\b return} {\cf6 3}\par
+        {\cf4\b else}:\par
+            pygame{\cf6 .}mouse{\cf6 .}set_cursor({\cf6 *}pygame{\cf6 .}cursors{\cf6 .}arrow)\par
+    {\cf4\b pass}\par
+\par
+\par
+{\cf4\b if} {\cf10 __name__} {\cf6 ==} {\cf15 "}{\cf15 __main__}{\cf15 "}:\par
+    main()\par
+}
