@@ -1,5 +1,3 @@
-# TODO 3 x 3 반칙 on/off 기능 구현
-
 import pygame, sys
 from pygame.locals import *
 from gomoku_constant import *
@@ -51,7 +49,7 @@ def main():
 
         drawBoard(goBoard, lastx, lasty)
 
-        # AI 객체 생성 (여기서 난이도 조절?)
+        # AI 객체 생성 (여기서 난이도 조절)
         ai = None
         level = selectLevel()
         if level == 1:

@@ -1,3 +1,6 @@
+#    gomoku_constant.py
+#    오목 게임에서 사용하는 상수들을 모아놓은 파일
+
 import pygame
 
 

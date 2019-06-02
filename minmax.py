@@ -1,3 +1,6 @@
+#    minmax.py
+#    minmax 알고리즘을 구현한 Ai1 클래스가 정의된 파일
+
 from evaluation_constant import *
 import copy
 import random
@@ -13,6 +16,7 @@ class Ai1:
         self.searchSize = 20
         pass
 
+    # 초기 바둑판 한가운데를 기준으로 사방의 2칸을 탐색공간으로 설정하는 메소드
     def getInitialSearchSpace(self):
         board = []
         searchSpace = []
@@ -26,6 +30,7 @@ class Ai1:
                 searchSpace.append((i, j))
         return board, searchSpace
 
+    # 착수된 좌표를 기준으로 탐색 공간을 갱신하는 메소드
     def resetSearchSpace(self, x, y):
         self.searchSpaceState[x][y] = True
         length = len(self.searchCandidate)
@@ -52,6 +57,7 @@ class Ai1:
                 self.searchSpace.append((i, j))
         pass
 
+    # 최초 바둑판 한가운데를 기준 사방으로 1칸 떨어진 공간을 평가함수가 적용될 공간으로 설정하는 메소드
     def getInitialEvaluationSpace(self):
         board = []
         evaluationSpace = []
@@ -63,6 +69,7 @@ class Ai1:
                 evaluationSpace.append((i, j))
         return board, evaluationSpace
 
+    # 착수된 좌표를 기준으로 평가함수가 적용될 공간을 갱신하는 메소드
     def resetEvaluationSpace(self, x, y):
         left = x - 1 if x - 1 >= 0 else 0
         right = x + 2 if x + 2 < GO_BOARD_X_COUNT else GO_BOARD_X_COUNT
@@ -76,6 +83,7 @@ class Ai1:
                 self.evaluationSpace.append((i, j))
         pass
 
+    # x, y 좌표에서 direction 방향으로 pattern 인자로 주어진 패턴이 존재하는지 확인하는 메소드
     def patternCheck(self, x, y, pattern, direction):
         if direction == HORIZONTAL and x >= GO_BOARD_X_COUNT - len(pattern) + 1:
             return False
@@ -97,6 +105,7 @@ class Ai1:
                 break
         return check
 
+    # 필수로 방어를 해야하는 수가 있는지 확인하는 메소드
     def defenceCheck(self):
         retx, rety = (None, None)
 
@@ -121,6 +130,7 @@ class Ai1:
 
         return retx, rety
 
+    # 끝내기 수가 존재하는지 확인하는 메소드
     def endGameCheck(self):
         retx, rety = (None, None)
 
@@ -145,6 +155,7 @@ class Ai1:
 
         return retx, rety
 
+    # 오목판의 점수를 평가하는 평가함수
     def evaluate(self):
         ai_score = 0
         player_score = 0
@@ -236,7 +247,7 @@ class Ai1:
                 return (minValue, None, None)
             pass
 
-
+    # AI가 바둑판에 착수하는 메소드
     def placement(self):
         print("Search space size : \n", len(self.searchSpace))
         print("Evaluation space size : \n", len(self.evaluationSpace))

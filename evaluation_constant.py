@@ -1,3 +1,7 @@
+#   evaluation_constant.py
+#   평가함수에서 사용되는 패턴과 그에 대응하는 점수 및
+#   끝내기 패턴, 필수 방어 패턴을 정의 해놓은 파일
+
 from gomoku_constant import *
 
 

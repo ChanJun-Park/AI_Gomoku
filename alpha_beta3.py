@@ -1,3 +1,8 @@
+#    alpha_beta3.py
+#    평가함수와 탐색공간을 개선한 버전.
+#    탐색공간에 반드시 포함되어야 하는 좌표를 포함시키고,
+#    평가공간에 들어가지 않아도 되는 좌표를 제거
+
 from evaluation_constant import *
 import random
 
@@ -13,6 +18,7 @@ class Ai10:
         self.searchSize = 20
         pass
 
+    # 탐색 공간에 포함될 수 있는 좌표들을 모아 리스트로 반환하는 메소드
     def getInitialCandidateSpace(self):
         candidateState = []
         candidateSpace = []
@@ -29,6 +35,7 @@ class Ai10:
                 candidateSpace.append((i, j))
         return candidateState, candidateSpace
 
+    # 초기에 탐색공간에 반드시 포함되어야 하는 좌표를 리스트로 반환하는 메소드
     def getInitialCompulsorySpace(self):
         compulsoryState = []
         compulsorySpace = []
@@ -46,6 +53,7 @@ class Ai10:
 
         return compulsoryState, compulsorySpace
 
+    # 탐색공간에 반드시 포함되어야 하는 좌표를 찾는 메소드
     def resetCompulsorySpace(self):
         for k in self.evaluationSpace:
             x, y = k
@@ -142,6 +150,7 @@ class Ai10:
                                 self.compulsorySpace.append((nx, ny))
         pass
 
+    # 착수된 좌표를 기준으로 탐색 공간을 갱신하는 메소드
     def resetSearchSpace(self, x, y):
         self.candidateState[x][y] = True
         self.compulsoryState[x][y] = True
@@ -178,6 +187,7 @@ class Ai10:
         else:
             self.searchSpace = self.compulsorySpace
 
+    # 초기 평가함수가 적용될 공간을 2차원 리스트로 반환해주는 메소드
     def getInitialEvaluationSpace(self):
         board = []
         evaluationSpace = []
@@ -189,6 +199,7 @@ class Ai10:
                 evaluationSpace.append((i, j))
         return board, evaluationSpace
 
+    # 착수가 된 좌표를 기준으로 새로 평가함수에 반영되야하는 공간을 갱신하는 메소드
     def resetEvaluationSpace(self, x, y):
         left = x - 1 if x - 1 >= 0 else 0
         right = x + 2 if x + 2 < GO_BOARD_X_COUNT else GO_BOARD_X_COUNT
@@ -223,6 +234,7 @@ class Ai10:
 
         pass
 
+    # x, y 좌표에서 direction 방향으로 pattern 인자로 주어진 패턴이 존재하는지 확인하는 메소드
     def patternCheck(self, x, y, pattern, direction):
         if direction == HORIZONTAL and x >= GO_BOARD_X_COUNT - len(pattern) + 1:
             return False
@@ -244,6 +256,7 @@ class Ai10:
                 break
         return check
 
+    # 필수로 방어를 해야하는 수가 있는지 확인하는 메소드
     def defenceCheck(self):
         retx, rety = (None, None)
 
@@ -268,6 +281,7 @@ class Ai10:
 
         return retx, rety
 
+    # 끝내기 수가 존재하는지 확인하는 메소드
     def endGameCheck(self):
         retx, rety = (None, None)
 
@@ -292,6 +306,7 @@ class Ai10:
 
         return retx, rety
 
+    # 오목판의 점수를 평가하는 평가함수
     def evaluate(self):
         ai_score = 0
         player_score = 0
@@ -389,6 +404,7 @@ class Ai10:
                 return (minValue, None, None)
             pass
 
+    # AI가 바둑판에 착수하는 메소드
     def placement(self):
         print("Search space size : \n", len(self.searchSpace))
         print("Evaluation space size : \n", len(self.evaluationSpace))
