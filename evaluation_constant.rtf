@@ -1,0 +1,210 @@
+{\rtf1\ansi\uc0\deff0{\fonttbl{\f0\fmodern\fprq1\fcharset0;}}{\colortbl;\red187\green187\blue187;\red64\green128\blue128;\red188\green122\blue0;\red0\green128\blue0;\red176\green0\blue64;\red102\green102\blue102;\red170\green34\blue255;\red0\green0\blue255;\red210\green65\blue58;\red25\green23\blue124;\red136\green0\blue0;\red160\green160\blue0;\red153\green153\blue153;\red125\green144\blue41;\red186\green33\blue33;\red187\green102\blue136;\red187\green102\blue34;\red0\green0\blue128;\red128\green0\blue128;\red160\green0\blue0;\red0\green160\blue0;\red255\green0\blue0;\red136\green136\blue136;\red0\green68\blue221;}\f0 {\cf4\b from} {\cf8\b gomoku_constant} {\cf4\b import} {\cf6 *}\par
+\par
+\par
+PLAYER1_7PATTERNS {\cf6 =} [[AI, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, AI],  {\cf2\i # 5. {\u50577}{\u51901}{\u50640} {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u46308}{\u51060} {\u47561}{\u44256}{\u51080}{\u45716} {\u48712}{\u52856} {\u54616}{\u45208} {\u51080}{\u45716}{\u49324}{\u47785}}\par
+                     [AI, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, AI],\par
+                     [AI, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, AI],\par
+                     [RED_STONE, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, AI],\par
+                     [AI, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, RED_STONE],\par
+                     [RED_STONE, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, RED_STONE],\par
+                     [RED_STONE, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, AI],\par
+                     [AI, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, RED_STONE],\par
+                     [RED_STONE, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, RED_STONE],\par
+                     [RED_STONE, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, AI],\par
+                     [AI, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, RED_STONE],\par
+                     [RED_STONE, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, RED_STONE],\par
+                     [EMPTY, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY],  {\cf2\i # 3. {\u48712}{\u52856} {\u54616}{\u45208} {\u51080}{\u45716} {\u49324}{\u47785}}\par
+                     [EMPTY, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, EMPTY],\par
+                     [EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, EMPTY],\par
+                     [EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, AI],  {\cf2\i # 4. {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u44256} {\u48712}{\u52856} {\u54616}{\u45208} {\u51080}{\u45716} {\u49324}{\u47785}}\par
+                     [EMPTY, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, AI],\par
+                     [EMPTY, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, AI],\par
+                     [AI, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, EMPTY],\par
+                     [AI, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, EMPTY],\par
+                     [AI, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY],\par
+                     [EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, RED_STONE],\par
+                     [EMPTY, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, RED_STONE],\par
+                     [EMPTY, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, RED_STONE],\par
+                     [RED_STONE, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, EMPTY],\par
+                     [RED_STONE, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, EMPTY],\par
+                     [RED_STONE, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY]]\par
+PLAYER1_6PATTERNS {\cf6 =} [[EMPTY, PLAYER1, PLAYER1, PLAYER1, PLAYER1, EMPTY],   {\cf2\i # 2. {\u49324}{\u47785}}\par
+                     [EMPTY, PLAYER1, PLAYER1, PLAYER1, PLAYER1, AI],   {\cf2\i # 7. {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u45716} {\u49324}{\u47785}}\par
+                     [AI, PLAYER1, PLAYER1, PLAYER1, PLAYER1, EMPTY],\par
+                     [EMPTY, PLAYER1, PLAYER1, PLAYER1, PLAYER1, RED_STONE],\par
+                     [RED_STONE, PLAYER1, PLAYER1, PLAYER1, PLAYER1, EMPTY],\par
+                     [EMPTY, PLAYER1, EMPTY, PLAYER1, PLAYER1, EMPTY],   {\cf2\i # 8. {\u48712}{\u52856} {\u51080}{\u45716} {\u49340}{\u47785}}\par
+                     [EMPTY, PLAYER1, PLAYER1, EMPTY, PLAYER1, EMPTY],\par
+                     [EMPTY, PLAYER1, PLAYER1, EMPTY, PLAYER1, AI],   {\cf2\i # 9. {\u48712}{\u52856} {\u51080}{\u44256} {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u45716} {\u49340}{\u47785}}\par
+                     [EMPTY, PLAYER1, EMPTY, PLAYER1, PLAYER1, AI],\par
+                     [AI, PLAYER1, EMPTY, PLAYER1, PLAYER1, EMPTY],\par
+                     [AI, PLAYER1, PLAYER1, EMPTY, PLAYER1, EMPTY],\par
+                     [EMPTY, PLAYER1, PLAYER1, EMPTY, PLAYER1, RED_STONE],\par
+                     [EMPTY, PLAYER1, EMPTY, PLAYER1, PLAYER1, RED_STONE],\par
+                     [RED_STONE, PLAYER1, EMPTY, PLAYER1, PLAYER1, EMPTY],\par
+                     [RED_STONE, PLAYER1, PLAYER1, EMPTY, PLAYER1, EMPTY]]\par
+PLAYER1_5PATTERNS {\cf6 =} [[PLAYER1, PLAYER1, PLAYER1, PLAYER1, PLAYER1],     {\cf2\i # 1. {\u50724}{\u47785}}\par
+                     [EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY],         {\cf2\i # 6. {\u49340}{\u47785}}\par
+                     [EMPTY, PLAYER1, PLAYER1, PLAYER1, AI],            {\cf2\i # 10. {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u45716} {\u49340}{\u47785}}\par
+                     [AI, PLAYER1, PLAYER1, PLAYER1, EMPTY],\par
+                     [EMPTY, PLAYER1, PLAYER1, PLAYER1, RED_STONE],\par
+                     [RED_STONE, PLAYER1, PLAYER1, PLAYER1, EMPTY]]\par
+PLAYER1_4PATTERNS {\cf6 =} [[EMPTY, PLAYER1, PLAYER1, EMPTY],                  {\cf2\i # 11. {\u51060}{\u47785}}\par
+                     [EMPTY, PLAYER1, PLAYER1, AI],                     {\cf2\i # 12. {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u45716} {\u51060}{\u47785}}\par
+                     [AI, PLAYER1, PLAYER1, EMPTY],\par
+                     [EMPTY, PLAYER1, PLAYER1, RED_STONE],\par
+                     [RED_STONE, PLAYER1, PLAYER1, EMPTY]]\par
+\par
+\par
+PLAYER1_7PATTERNS_SCORE {\cf6 =} [{\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25},  {\cf2\i # 5.}\par
+                           {\cf6 2000}, {\cf6 2000}, {\cf6 2000},                                {\cf2\i # 3.}\par
+                           {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}]  {\cf2\i # 4.}\par
+PLAYER1_6PATTERNS_SCORE {\cf6 =} [{\cf6 100000},                  {\cf2\i # 2.}\par
+                           {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25},          {\cf2\i # 7.}\par
+                           {\cf6 50}, {\cf6 50},                  {\cf2\i # 8.}\par
+                           {\cf6 5}, {\cf6 5}, {\cf6 5}, {\cf6 5}, {\cf6 5}, {\cf6 5}, {\cf6 5}, {\cf6 5}]  {\cf2\i # 9.}\par
+PLAYER1_5PATTERNS_SCORE {\cf6 =} [{\cf6 1000000},                 {\cf2\i # 1.}\par
+                           {\cf6 1010},                    {\cf2\i # 6.}\par
+                           {\cf6 3}, {\cf6 3}, {\cf6 3}, {\cf6 3}]              {\cf2\i # 10.}\par
+PLAYER1_4PATTERNS_SCORE {\cf6 =} [{\cf6 2},                       {\cf2\i # 11.}\par
+                           {\cf6 1}, {\cf6 1}, {\cf6 1}, {\cf6 1}]              {\cf2\i # 12.}\par
+\par
+\par
+AI_7PATTERNS {\cf6 =} [[PLAYER1, AI, EMPTY, AI, AI, AI, PLAYER1],  {\cf2\i # 5. {\u50577}{\u51901}{\u50640} {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u46308}{\u51060} {\u47561}{\u44256}{\u51080}{\u45716} {\u48712}{\u52856} {\u54616}{\u45208} {\u51080}{\u45716}{\u49324}{\u47785}}\par
+                [PLAYER1, AI, AI, EMPTY, AI, AI, PLAYER1],\par
+                [PLAYER1, AI, AI, AI, EMPTY, AI, PLAYER1],\par
+                [RED_STONE, AI, EMPTY, AI, AI, AI, PLAYER1],\par
+                [PLAYER1, AI, EMPTY, AI, AI, AI, RED_STONE],\par
+                [RED_STONE, AI, EMPTY, AI, AI, AI, RED_STONE],\par
+                [RED_STONE, AI, AI, EMPTY, AI, AI, PLAYER1],\par
+                [PLAYER1, AI, AI, EMPTY, AI, AI, RED_STONE],\par
+                [RED_STONE, AI, AI, EMPTY, AI, AI, RED_STONE],\par
+                [RED_STONE, AI, AI, AI, EMPTY, AI, PLAYER1],\par
+                [PLAYER1, AI, AI, AI, EMPTY, AI, RED_STONE],\par
+                [RED_STONE, AI, AI, AI, EMPTY, AI, RED_STONE],\par
+                [EMPTY, AI, EMPTY, AI, AI, AI, EMPTY],  {\cf2\i # 3. {\u48712}{\u52856} {\u54616}{\u45208} {\u51080}{\u45716} {\u49324}{\u47785}}\par
+                [EMPTY, AI, AI, EMPTY, AI, AI, EMPTY],\par
+                [EMPTY, AI, AI, AI, EMPTY, AI, EMPTY],\par
+                [EMPTY, AI, AI, AI, EMPTY, AI, PLAYER1],  {\cf2\i # 4. {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u44256} {\u48712}{\u52856} {\u54616}{\u45208} {\u51080}{\u45716} {\u49324}{\u47785}}\par
+                [EMPTY, AI, AI, EMPTY, AI, AI, PLAYER1],\par
+                [EMPTY, AI, EMPTY, AI, AI, AI, PLAYER1],\par
+                [PLAYER1, AI, AI, AI, EMPTY, AI, EMPTY],\par
+                [PLAYER1, AI, AI, EMPTY, AI, AI, EMPTY],\par
+                [PLAYER1, AI, EMPTY, AI, AI, AI, EMPTY],\par
+                [EMPTY, AI, AI, AI, EMPTY, AI, RED_STONE],\par
+                [EMPTY, AI, AI, EMPTY, AI, AI, RED_STONE],\par
+                [EMPTY, AI, EMPTY, AI, AI, AI, RED_STONE],\par
+                [RED_STONE, AI, AI, AI, EMPTY, AI, EMPTY],\par
+                [RED_STONE, AI, AI, EMPTY, AI, AI, EMPTY],\par
+                [RED_STONE, AI, EMPTY, AI, AI, AI, EMPTY]]\par
+AI_6PATTERNS {\cf6 =} [[EMPTY, AI, AI, AI, AI, EMPTY],   {\cf2\i # 2. {\u49324}{\u47785}}\par
+                [EMPTY, AI, AI, AI, AI, PLAYER1],   {\cf2\i # 7. {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u45716} {\u49324}{\u47785}}\par
+                [PLAYER1, AI, AI, AI, AI, EMPTY],\par
+                [EMPTY, AI, AI, AI, AI, RED_STONE],\par
+                [RED_STONE, AI, AI, AI, AI, EMPTY],\par
+                [EMPTY, AI, EMPTY, AI, AI, EMPTY],   {\cf2\i # 8. {\u48712}{\u52856} {\u51080}{\u45716} {\u49340}{\u47785}}\par
+                [EMPTY, AI, AI, EMPTY, AI, EMPTY],\par
+                [EMPTY, AI, AI, EMPTY, AI, PLAYER1],   {\cf2\i # 9. {\u48712}{\u52856} {\u51080}{\u44256} {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u45716} {\u49340}{\u47785}}\par
+                [EMPTY, AI, EMPTY, AI, AI, PLAYER1],\par
+                [PLAYER1, AI, EMPTY, AI, AI, EMPTY],\par
+                [PLAYER1, AI, AI, EMPTY, AI, EMPTY],\par
+                [EMPTY, AI, AI, EMPTY, AI, RED_STONE],\par
+                [EMPTY, AI, EMPTY, AI, AI, RED_STONE],\par
+                [RED_STONE, AI, EMPTY, AI, AI, EMPTY],\par
+                [RED_STONE, AI, AI, EMPTY, AI, EMPTY]]\par
+AI_5PATTERNS {\cf6 =} [[AI, AI, AI, AI, AI],     {\cf2\i # 1. {\u50724}{\u47785}}\par
+                [EMPTY, AI, AI, AI, EMPTY],         {\cf2\i # 6. {\u49340}{\u47785}}\par
+                [EMPTY, AI, AI, AI, PLAYER1],            {\cf2\i # 10. {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u45716} {\u49340}{\u47785}}\par
+                [PLAYER1, AI, AI, AI, EMPTY],\par
+                [EMPTY, AI, AI, AI, RED_STONE],\par
+                [RED_STONE, AI, AI, AI, EMPTY]]\par
+AI_4PATTERNS {\cf6 =} [[EMPTY, AI, AI, EMPTY],                  {\cf2\i # 11. {\u51060}{\u47785}}\par
+                [EMPTY, AI, AI, PLAYER1],                {\cf2\i # 12. {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u45716} {\u51060}{\u47785}}\par
+                [PLAYER1, AI, AI, EMPTY],\par
+                [EMPTY, AI, AI, RED_STONE],\par
+                [RED_STONE, AI, AI, EMPTY]]\par
+\par
+AI_7PATTERNS_SCORE {\cf6 =} [{\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25},  {\cf2\i # 5.}\par
+                      {\cf6 2000}, {\cf6 2000}, {\cf6 2000},                                {\cf2\i # 3.}\par
+                      {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}, {\cf6 1000}]  {\cf2\i # 4.}\par
+AI_6PATTERNS_SCORE {\cf6 =} [{\cf6 100000},                  {\cf2\i # 2.}\par
+                      {\cf6 25}, {\cf6 25}, {\cf6 25}, {\cf6 25},          {\cf2\i # 7.}\par
+                      {\cf6 50}, {\cf6 50},                  {\cf2\i # 8.}\par
+                      {\cf6 5}, {\cf6 5}, {\cf6 5}, {\cf6 5}, {\cf6 5}, {\cf6 5}, {\cf6 5}, {\cf6 5}]  {\cf2\i # 9.}\par
+AI_5PATTERNS_SCORE {\cf6 =} [{\cf6 1000000},                 {\cf2\i # 1.}\par
+                      {\cf6 1010},                    {\cf2\i # 6.}\par
+                      {\cf6 3}, {\cf6 3}, {\cf6 3}, {\cf6 3}]              {\cf2\i # 10.}\par
+AI_4PATTERNS_SCORE {\cf6 =} [{\cf6 2},                       {\cf2\i # 11.}\par
+                      {\cf6 1}, {\cf6 1}, {\cf6 1}, {\cf6 1}]              {\cf2\i # 12.}\par
+\par
+{\cf2\i # {\u52395} {\u48264}{\u51704} EMPTY{\u50640} {\u52265}{\u49688}{\u54616}{\u47732} {\u46104}{\u45716} {\u45149}{\u45236}{\u44592} {\u54056}{\u53556}}\par
+AI_ENDGAME_PATTERN1 {\cf6 =} [[PLAYER1, AI, EMPTY, AI, AI, AI, PLAYER1],  {\cf2\i # 5. {\u50577}{\u51901}{\u50640} {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u46308}{\u51060} {\u47561}{\u44256}{\u51080}{\u45716} {\u48712}{\u52856} {\u54616}{\u45208} {\u51080}{\u45716}{\u49324}{\u47785}}\par
+                       [PLAYER1, AI, AI, EMPTY, AI, AI, PLAYER1],\par
+                       [PLAYER1, AI, AI, AI, EMPTY, AI, PLAYER1],\par
+                       [RED_STONE, AI, EMPTY, AI, AI, AI, PLAYER1],\par
+                       [PLAYER1, AI, EMPTY, AI, AI, AI, RED_STONE],\par
+                       [RED_STONE, AI, EMPTY, AI, AI, AI, RED_STONE],\par
+                       [RED_STONE, AI, AI, EMPTY, AI, AI, PLAYER1],\par
+                       [PLAYER1, AI, AI, EMPTY, AI, AI, RED_STONE],\par
+                       [RED_STONE, AI, AI, EMPTY, AI, AI, RED_STONE],\par
+                       [RED_STONE, AI, AI, AI, EMPTY, AI, PLAYER1],\par
+                       [PLAYER1, AI, AI, AI, EMPTY, AI, RED_STONE],\par
+                       [RED_STONE, AI, AI, AI, EMPTY, AI, RED_STONE],\par
+                       [PLAYER1, AI, AI, AI, EMPTY, AI, EMPTY],    {\cf2\i # 4. {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u44256} {\u48712}{\u52856} {\u54616}{\u45208} {\u51080}{\u45716} {\u49324}{\u47785}}\par
+                       [PLAYER1, AI, AI, EMPTY, AI, AI, EMPTY],\par
+                       [PLAYER1, AI, EMPTY, AI, AI, AI, EMPTY],\par
+                       [RED_STONE, AI, AI, AI, EMPTY, AI, EMPTY],\par
+                       [RED_STONE, AI, AI, EMPTY, AI, AI, EMPTY],\par
+                       [RED_STONE, AI, EMPTY, AI, AI, AI, EMPTY],\par
+                       [EMPTY, AI, AI, AI, AI, EMPTY],     {\cf2\i # 2. {\u49324}{\u47785}}\par
+                       [EMPTY, AI, AI, AI, AI, PLAYER1],   {\cf2\i # 7. {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u45716} {\u49324}{\u47785}}\par
+                       [PLAYER1, AI, AI, AI, AI, EMPTY],\par
+                       [EMPTY, AI, AI, AI, AI, RED_STONE],\par
+                       [RED_STONE, AI, AI, AI, AI, EMPTY]]\par
+\par
+{\cf2\i # {\u46160} {\u48264}{\u51704} EMPTY{\u50640} {\u52265}{\u49688}{\u54616}{\u47732} {\u46104}{\u45716} {\u45149}{\u45236}{\u44592} {\u54056}{\u53556}}\par
+AI_ENDGAME_PATTERN2 {\cf6 =} [[EMPTY, AI, EMPTY, AI, AI, AI, EMPTY],  {\cf2\i # 3. {\u48712}{\u52856} {\u54616}{\u45208} {\u51080}{\u45716} {\u49324}{\u47785}}\par
+                       [EMPTY, AI, AI, EMPTY, AI, AI, EMPTY],\par
+                       [EMPTY, AI, AI, AI, EMPTY, AI, EMPTY],\par
+                       [EMPTY, AI, AI, AI, EMPTY, AI, PLAYER1],  {\cf2\i # 4. {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u44256} {\u48712}{\u52856} {\u54616}{\u45208} {\u51080}{\u45716} {\u49324}{\u47785}}\par
+                       [EMPTY, AI, AI, EMPTY, AI, AI, PLAYER1],\par
+                       [EMPTY, AI, EMPTY, AI, AI, AI, PLAYER1],\par
+                       [EMPTY, AI, AI, AI, EMPTY, AI, RED_STONE],\par
+                       [EMPTY, AI, AI, EMPTY, AI, AI, RED_STONE],\par
+                       [EMPTY, AI, EMPTY, AI, AI, AI, RED_STONE]]\par
+\par
+{\cf2\i # {\u52395} {\u48264}{\u51704} EMPTY{\u50640} {\u52265}{\u49688}{\u54616}{\u47732} {\u46104}{\u45716} {\u54596}{\u49688} {\u48169}{\u50612} {\u54056}{\u53556}}\par
+AI_DEFENCE_PATTERN1 {\cf6 =} [[AI, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, AI],  {\cf2\i # 5. {\u50577}{\u51901}{\u50640} {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u46308}{\u51060} {\u47561}{\u44256}{\u51080}{\u45716} {\u48712}{\u52856} {\u54616}{\u45208} {\u51080}{\u45716}{\u49324}{\u47785}}\par
+                       [AI, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, AI],\par
+                       [AI, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, AI],\par
+                       [RED_STONE, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, AI],\par
+                       [AI, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, RED_STONE],\par
+                       [RED_STONE, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, RED_STONE],\par
+                       [RED_STONE, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, AI],\par
+                       [AI, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, RED_STONE],\par
+                       [RED_STONE, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, RED_STONE],\par
+                       [RED_STONE, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, AI],\par
+                       [AI, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, RED_STONE],\par
+                       [RED_STONE, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, RED_STONE],\par
+                       [AI, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, EMPTY],  {\cf2\i # 4. {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u44256} {\u48712}{\u52856} {\u54616}{\u45208} {\u51080}{\u45716} {\u49324}{\u47785}}\par
+                       [AI, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, EMPTY],\par
+                       [AI, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY],\par
+                       [RED_STONE, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, EMPTY],\par
+                       [RED_STONE, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, EMPTY],\par
+                       [RED_STONE, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY],\par
+                       [EMPTY, PLAYER1, PLAYER1, PLAYER1, PLAYER1, AI],  {\cf2\i # 7. {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u45716} {\u49324}{\u47785}}\par
+                       [AI, PLAYER1, PLAYER1, PLAYER1, PLAYER1, EMPTY],\par
+                       [EMPTY, PLAYER1, PLAYER1, PLAYER1, PLAYER1, RED_STONE],\par
+                       [RED_STONE, PLAYER1, PLAYER1, PLAYER1, PLAYER1, EMPTY]]\par
+\par
+{\cf2\i # {\u46160} {\u48264}{\u51704} EMPTY{\u50640} {\u52265}{\u49688}{\u54616}{\u47732} {\u46104}{\u45716} {\u54596}{\u49688} {\u48169}{\u50612} {\u54056}{\u53556}}\par
+AI_DEFENCE_PATTERN2 {\cf6 =} [[EMPTY, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY],  {\cf2\i # 3. {\u48712}{\u52856} {\u54616}{\u45208} {\u51080}{\u45716} {\u49324}{\u47785}}\par
+                       [EMPTY, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, EMPTY],\par
+                       [EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, EMPTY],\par
+                       [EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, AI],  {\cf2\i # 4. {\u49345}{\u45824}{\u54200} {\u48148}{\u46161}{\u46028}{\u51060} {\u47561}{\u44256} {\u51080}{\u44256} {\u48712}{\u52856} {\u54616}{\u45208} {\u51080}{\u45716} {\u49324}{\u47785}}\par
+                       [EMPTY, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, AI],\par
+                       [EMPTY, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, AI],\par
+                       [EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, RED_STONE],\par
+                       [EMPTY, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, RED_STONE],\par
+                       [EMPTY, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, RED_STONE]]\par
+}

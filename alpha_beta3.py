@@ -214,7 +214,9 @@ class Ai10:
                         check = False
                         break
             if check:
+                print("deleted from eval space : ", x, y)
                 del self.evaluationSpace[k]
+                self.evaluationSpaceState[x][y] = False
                 length -= 1
             else:
                 k += 1
